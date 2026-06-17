@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Bolão Copa 2026",
+    "slug": "bolao-copa-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#0b6e4f"
+    },
+    "android": {
+      "package": "com.unialfa.bolao"
+    },
+    "ios": {
+      "bundleIdentifier": "com.unialfa.bolao"
+    }
+  }
+}
