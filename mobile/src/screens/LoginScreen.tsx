@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { estilos } from '../theme';
+import type { LoginScreenProps } from '../types';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }: LoginScreenProps) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -15,7 +16,7 @@ export default function LoginScreen({ navigation }) {
     setCarregando(true);
     try {
       await login(email.trim(), senha);
-    } catch (e) {
+    } catch (e: any) {
       setErro(e.message);
     } finally {
       setCarregando(false);

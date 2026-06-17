@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
+import { Text, TextInput, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { estilos, cores } from '../theme';
@@ -18,7 +18,7 @@ export default function PerfilScreen() {
       await api.editarPerfil(nome.trim(), avatarUrl.trim());
       await atualizarUsuario();
       Alert.alert('Perfil', 'Dados atualizados.');
-    } catch (e) {
+    } catch (e: any) {
       setErro(e.message);
     } finally {
       setSalvando(false);
@@ -26,25 +26,21 @@ export default function PerfilScreen() {
   }
 
   function confirmarExclusao() {
-    Alert.alert(
-      'Excluir conta',
-      'Esta ação é permanente e remove seus dados. Deseja continuar?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await api.excluirConta();
-              await logout();
-            } catch (e) {
-              Alert.alert('Erro', e.message);
-            }
-          },
+    Alert.alert('Excluir conta', 'Esta ação é permanente e remove seus dados. Deseja continuar?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Excluir',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await api.excluirConta();
+            await logout();
+          } catch (e: any) {
+            Alert.alert('Erro', e.message);
+          }
         },
-      ]
-    );
+      },
+    ]);
   }
 
   return (

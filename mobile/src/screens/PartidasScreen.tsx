@@ -10,11 +10,18 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { api } from '../api';
 import { estilos, cores, labelFase, labelStatus, formatarDataHora } from '../theme';
+import type { Fase, Partida, PartidasScreenProps, StatusPartida } from '../types';
 
-const FASES = ['GRUPOS', 'OITAVAS', 'QUARTAS', 'SEMIFINAL', 'FINAL'];
-const STATUS = ['AGENDADA', 'EM_ANDAMENTO', 'ENCERRADA'];
+const FASES: Fase[] = ['GRUPOS', 'OITAVAS', 'QUARTAS', 'SEMIFINAL', 'FINAL'];
+const STATUS: StatusPartida[] = ['AGENDADA', 'EM_ANDAMENTO', 'ENCERRADA'];
 
-function Filtro({ ativo, texto, onPress }) {
+interface FiltroProps {
+  ativo: boolean;
+  texto: string;
+  onPress: () => void;
+}
+
+function Filtro({ ativo, texto, onPress }: FiltroProps) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -34,8 +41,8 @@ function Filtro({ ativo, texto, onPress }) {
 }
 
 // Agrupa as partidas por fase (RF-010).
-function agruparPorFase(partidas) {
-  const grupos = {};
+function agruparPorFase(partidas: Partida[]): [string, Partida[]][] {
+  const grupos: Record<string, Partida[]> = {};
   partidas.forEach((p) => {
     const chave = p.fase || 'OUTROS';
     if (!grupos[chave]) grupos[chave] = [];
@@ -44,11 +51,11 @@ function agruparPorFase(partidas) {
   return Object.entries(grupos);
 }
 
-export default function PartidasScreen({ navigation }) {
-  const [partidas, setPartidas] = useState([]);
+export default function PartidasScreen({ navigation }: PartidasScreenProps) {
+  const [partidas, setPartidas] = useState<Partida[]>([]);
   const [carregando, setCarregando] = useState(true);
-  const [fase, setFase] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [fase, setFase] = useState<Fase | null>(null);
+  const [status, setStatus] = useState<StatusPartida | null>(null);
 
   const carregar = useCallback(async () => {
     setCarregando(true);
@@ -99,7 +106,9 @@ export default function PartidasScreen({ navigation }) {
           }
           renderItem={({ item: [chaveFase, lista] }) => (
             <View>
-              <Text style={{ fontWeight: 'bold', color: cores.primaria, marginBottom: 6, marginTop: 4 }}>
+              <Text
+                style={{ fontWeight: 'bold', color: cores.primaria, marginBottom: 6, marginTop: 4 }}
+              >
                 {labelFase(chaveFase)}
               </Text>
               {lista.map((p) => (

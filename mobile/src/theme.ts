@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import type { CriterioPontuacao, Fase, StatusPartida } from './types';
 
 export const cores = {
   primaria: '#0b6e4f',
@@ -45,7 +46,7 @@ export const estilos = StyleSheet.create({
   erro: { color: cores.erro, marginTop: 8 },
 });
 
-const labelsFase = {
+const labelsFase: Record<Fase, string> = {
   GRUPOS: 'Fase de Grupos',
   OITAVAS: 'Oitavas de Final',
   QUARTAS: 'Quartas de Final',
@@ -53,23 +54,23 @@ const labelsFase = {
   FINAL: 'Final',
 };
 
-const labelsStatus = {
+const labelsStatus: Record<StatusPartida, string> = {
   AGENDADA: 'Agendada',
   EM_ANDAMENTO: 'Em andamento',
   ENCERRADA: 'Encerrada',
 };
 
-const labelsCriterio = {
+const labelsCriterio: Record<CriterioPontuacao, string> = {
   PLACAR_EXATO: 'Placar exato',
   VENCEDOR_OU_EMPATE: 'Acertou o vencedor/empate',
   ERROU: 'Errou',
 };
 
-export const labelFase = (f) => labelsFase[f] || f;
-export const labelStatus = (s) => labelsStatus[s] || s;
-export const labelCriterio = (c) => labelsCriterio[c] || c;
+export const labelFase = (f: string): string => labelsFase[f as Fase] || f;
+export const labelStatus = (s: string): string => labelsStatus[s as StatusPartida] || s;
+export const labelCriterio = (c: string): string => labelsCriterio[c as CriterioPontuacao] || c;
 
-export function formatarDataHora(iso) {
+export function formatarDataHora(iso?: string | null): string {
   if (!iso) return '';
   const d = new Date(iso);
   return d.toLocaleString('pt-BR', {

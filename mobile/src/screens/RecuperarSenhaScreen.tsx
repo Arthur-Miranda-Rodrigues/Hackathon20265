@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { api } from '../api';
 import { estilos } from '../theme';
 
@@ -16,7 +16,7 @@ export default function RecuperarSenhaScreen() {
     try {
       const res = await api.recuperarSenha(email.trim());
       setMensagem(res.mensagem || 'Token de recuperação enviado.');
-    } catch (e) {
+    } catch (e: any) {
       setErro(e.message);
     } finally {
       setCarregando(false);

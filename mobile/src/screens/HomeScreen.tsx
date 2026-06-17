@@ -4,10 +4,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { estilos, cores, labelFase, formatarDataHora } from '../theme';
+import type { Partida } from '../types';
 
 export default function HomeScreen() {
   const { usuario } = useAuth();
-  const [partidas, setPartidas] = useState([]);
+  const [partidas, setPartidas] = useState<Partida[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
 
@@ -15,7 +16,7 @@ export default function HomeScreen() {
     setErro('');
     try {
       setPartidas(await api.proximas());
-    } catch (e) {
+    } catch (e: any) {
       setErro(e.message);
     } finally {
       setCarregando(false);

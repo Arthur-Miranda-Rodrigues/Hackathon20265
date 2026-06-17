@@ -4,15 +4,16 @@ import { useFocusEffect } from '@react-navigation/native';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { estilos, cores } from '../theme';
+import type { MinhaPosicao, Page, RankingItem } from '../types';
 
 export default function RankingScreen() {
   const { usuario } = useAuth();
   const [pagina, setPagina] = useState(0);
-  const [dados, setDados] = useState({ content: [], totalPages: 1, number: 0 });
-  const [minhaPosicao, setMinhaPosicao] = useState(null);
+  const [dados, setDados] = useState<Page<RankingItem>>({ content: [], totalPages: 1, number: 0 });
+  const [minhaPosicao, setMinhaPosicao] = useState<MinhaPosicao | null>(null);
   const [carregando, setCarregando] = useState(true);
 
-  const carregar = useCallback(async (page) => {
+  const carregar = useCallback(async (page: number) => {
     setCarregando(true);
     try {
       const [ranking, posicao] = await Promise.all([api.ranking(page, 50), api.minhaPosicao()]);
@@ -77,18 +78,24 @@ export default function RankingScreen() {
                     {item.placaresExatos} placar(es) exato(s)
                   </Text>
                 </View>
-                <Text style={{ fontWeight: 'bold', color: cores.texto }}>{item.pontuacaoTotal} pts</Text>
+                <Text style={{ fontWeight: 'bold', color: cores.texto }}>
+                  {item.pontuacaoTotal} pts
+                </Text>
               </View>
             );
           }}
           ListFooterComponent={
             dados.totalPages > 1 ? (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}
+              >
                 <TouchableOpacity
                   disabled={pagina <= 0}
                   onPress={() => setPagina((p) => Math.max(0, p - 1))}
                 >
-                  <Text style={{ color: pagina <= 0 ? cores.textoFraco : cores.primaria }}>‹ Anterior</Text>
+                  <Text style={{ color: pagina <= 0 ? cores.textoFraco : cores.primaria }}>
+                    ‹ Anterior
+                  </Text>
                 </TouchableOpacity>
                 <Text style={{ color: cores.textoFraco }}>
                   Página {dados.number + 1} de {dados.totalPages}
@@ -97,7 +104,11 @@ export default function RankingScreen() {
                   disabled={pagina >= dados.totalPages - 1}
                   onPress={() => setPagina((p) => p + 1)}
                 >
-                  <Text style={{ color: pagina >= dados.totalPages - 1 ? cores.textoFraco : cores.primaria }}>
+                  <Text
+                    style={{
+                      color: pagina >= dados.totalPages - 1 ? cores.textoFraco : cores.primaria,
+                    }}
+                  >
                     Próxima ›
                   </Text>
                 </TouchableOpacity>

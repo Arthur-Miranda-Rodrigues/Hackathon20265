@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { api } from '../api';
 import { estilos } from '../theme';
+import type { CadastroScreenProps } from '../types';
 
-export default function CadastroScreen({ navigation }) {
+export default function CadastroScreen({ navigation }: CadastroScreenProps) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -17,7 +18,7 @@ export default function CadastroScreen({ navigation }) {
       await api.cadastro(nome.trim(), email.trim(), senha);
       Alert.alert('Conta criada', 'Faça login para continuar.');
       navigation.navigate('Login');
-    } catch (e) {
+    } catch (e: any) {
       setErro(e.message);
     } finally {
       setCarregando(false);

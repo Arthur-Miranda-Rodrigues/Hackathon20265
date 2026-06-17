@@ -3,9 +3,10 @@ import { View, Text, FlatList, ActivityIndicator, RefreshControl } from 'react-n
 import { useFocusEffect } from '@react-navigation/native';
 import { api } from '../api';
 import { estilos, cores, labelCriterio, formatarDataHora } from '../theme';
+import type { Palpite } from '../types';
 
 export default function MeusPalpitesScreen() {
-  const [palpites, setPalpites] = useState([]);
+  const [palpites, setPalpites] = useState<Palpite[]>([]);
   const [carregando, setCarregando] = useState(true);
 
   const carregar = useCallback(async () => {
@@ -43,7 +44,9 @@ export default function MeusPalpitesScreen() {
           const encerrada = item.resultadoGolsA != null && item.resultadoGolsB != null;
           return (
             <View style={estilos.card}>
-              <Text style={{ fontWeight: 'bold', fontSize: 15, color: cores.texto }}>{item.partida}</Text>
+              <Text style={{ fontWeight: 'bold', fontSize: 15, color: cores.texto }}>
+                {item.partida}
+              </Text>
               <Text style={{ color: cores.textoFraco, marginTop: 2 }}>
                 {formatarDataHora(item.dataHora)}
               </Text>
@@ -61,7 +64,9 @@ export default function MeusPalpitesScreen() {
                     {item.pontosObtidos} ponto(s)
                   </Text>
                   {!!item.criterioPontuacao && (
-                    <Text style={{ color: cores.textoFraco }}>{labelCriterio(item.criterioPontuacao)}</Text>
+                    <Text style={{ color: cores.textoFraco }}>
+                      {labelCriterio(item.criterioPontuacao)}
+                    </Text>
                   )}
                 </View>
               )}

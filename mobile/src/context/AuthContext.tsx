@@ -1,11 +1,21 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../api';
+import type { Usuario } from '../types';
 
-const AuthContext = createContext(null);
+interface AuthContextValue {
+  usuario: Usuario | null;
+  carregando: boolean;
+  login: (email: string, senha: string) => Promise<void>;
+  logout: () => Promise<void>;
+  atualizarUsuario: () => Promise<void>;
+  setUsuario: React.Dispatch<React.SetStateAction<Usuario | null>>;
+}
 
-export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(null);
+const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -22,7 +32,7 @@ export function AuthProvider({ children }) {
     })();
   }, []);
 
-  async function login(email, senha) {
+  async function login(email: string, senha: string) {
     const { token } = await api.login(email, senha);
     await AsyncStorage.setItem('token', token);
     setUsuario(await api.me());
@@ -41,7 +51,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ usuario, carregando, login, logout, atualizarUsuario, setUsuario }}>
+    <AuthContext.Provider
+      value={{ usuario, carregando, login, logout, atualizarUsuario, setUsuario }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -5,6 +5,7 @@ Artefato 2 do Hackathon: app mobile que consome a API REST do backend Spring Boo
 ## Stack
 
 - React Native (Expo SDK 51)
+- TypeScript (strict)
 - React Navigation (stack + tabs)
 - AsyncStorage (token JWT)
 
