@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-3">
+    <div th:insert="~{index :: menu}"></div>
+    <a th:href="@{/partidas/novo}" class="btn btn-dark mb-3"><i class="bi bi-plus-circle"></i> Nova partida</a>
+    <table class="table table-hover">
+        <thead><tr><th>Id</th><th>Partida</th><th>Data/Hora</th><th>Fase</th><th>Status</th><th>Placar</th><th>Ações</th></tr></thead>
+        <tbody>
+        <tr th:each="partida : ${partidas}">
+            <td th:text="${partida.id}">1</td>
+            <td><span th:text="${partida.selecaoA.nome}">A</span> x <span th:text="${partida.selecaoB.nome}">B</span></td>
+            <td th:text="${#temporals.format(partida.dataHora, 'dd/MM/yyyy HH:mm')}">data</td>
+            <td th:text="${partida.fase}">fase</td>
+            <td th:text="${partida.status}">status</td>
+            <td><span th:text="${partida.golsA != null ? partida.golsA : '-'}">-</span> x <span th:text="${partida.golsB != null ? partida.golsB : '-'}">-</span></td>
+            <td>
+                <a th:href="@{'/partidas/editar/' + ${partida.id}}" class="btn btn-outline-dark btn-sm">Editar</a>
+                <a th:href="@{'/resultados/' + ${partida.id}}" class="btn btn-outline-primary btn-sm">Resultado</a>
+                <a th:href="@{'/partidas/remover/' + ${partida.id}}" class="btn btn-outline-danger btn-sm">Remover</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-3">
+    <div th:insert="~{index :: menu}"></div>
+    <h4>Lançar/Editar resultado</h4>
+    <p><strong th:text="${partida.selecaoA.nome}">A</strong> x <strong th:text="${partida.selecaoB.nome}">B</strong></p>
+    <form th:action="@{/resultados/salvar}" method="post">
+        <input type="hidden" name="partidaId" th:value="${partida.id}">
+        <div class="mb-3"><label class="form-label" th:text="${'Gols ' + partida.selecaoA.nome}">Gols A</label><input class="form-control" type="number" min="0" name="golsA" th:value="${partida.golsA}" required></div>
+        <div class="mb-3"><label class="form-label" th:text="${'Gols ' + partida.selecaoB.nome}">Gols B</label><input class="form-control" type="number" min="0" name="golsB" th:value="${partida.golsB}" required></div>
+        <button class="btn btn-dark" type="submit">Salvar resultado</button>
+        <a th:href="@{/partidas}" class="btn btn-outline-secondary">Voltar</a>
+    </form>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>

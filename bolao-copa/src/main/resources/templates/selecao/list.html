@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-3">
+    <div th:insert="~{index :: menu}"></div>
+    <a th:href="@{/selecoes/novo}" class="btn btn-dark mb-3"><i class="bi bi-plus-circle"></i> Nova seleção</a>
+    <table class="table table-hover">
+        <thead><tr><th>Id</th><th>Nome</th><th>Código FIFA</th><th>Grupo</th><th>Bandeira/Escudo</th><th>Ações</th></tr></thead>
+        <tbody>
+        <tr th:each="selecao : ${selecoes}">
+            <td th:text="${selecao.id}">1</td>
+            <td th:text="${selecao.nome}">Brasil</td>
+            <td th:text="${selecao.codigoFifa}">BRA</td>
+            <td th:text="${selecao.grupo}">A</td>
+            <td th:text="${selecao.bandeiraUrl}">url</td>
+            <td>
+                <a th:href="@{'/selecoes/editar/' + ${selecao.id}}" class="btn btn-outline-dark btn-sm">Editar</a>
+                <a th:href="@{'/selecoes/remover/' + ${selecao.id}}" class="btn btn-outline-danger btn-sm">Remover</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>
