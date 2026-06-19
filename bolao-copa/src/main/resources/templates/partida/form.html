@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-3">
+    <div th:insert="~{index :: menu}"></div>
+    <form th:action="@{/partidas/salvar}" method="post">
+        <input type="hidden" name="id" th:value="${partida.id}">
+        <input type="hidden" name="golsA" th:value="${partida.golsA}">
+        <input type="hidden" name="golsB" th:value="${partida.golsB}">
+        <div class="mb-3">
+            <label class="form-label">Seleção A</label>
+            <select class="form-select" name="selecaoA.id" required>
+                <option value="">Selecione</option>
+                <option th:each="selecao : ${selecoes}" th:value="${selecao.id}" th:text="${selecao.nome}" th:selected="${partida.selecaoA != null && partida.selecaoA.id == selecao.id}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Seleção B</label>
+            <select class="form-select" name="selecaoB.id" required>
+                <option value="">Selecione</option>
+                <option th:each="selecao : ${selecoes}" th:value="${selecao.id}" th:text="${selecao.nome}" th:selected="${partida.selecaoB != null && partida.selecaoB.id == selecao.id}"></option>
+            </select>
+        </div>
+        <div class="mb-3"><label class="form-label">Data/Hora</label><input class="form-control" type="datetime-local" name="dataHora" th:value="${partida.dataHora}" required></div>
+        <div class="mb-3"><label class="form-label">Estádio</label><input class="form-control" name="estadio" th:value="${partida.estadio}" required></div>
+        <div class="mb-3"><label class="form-label">Fase</label><select class="form-select" name="fase" required><option th:each="fase : ${fases}" th:value="${fase}" th:text="${fase}" th:selected="${partida.fase == fase}"></option></select></div>
+        <div class="mb-3"><label class="form-label">Grupo</label><input class="form-control" name="grupo" th:value="${partida.grupo}"></div>
+        <div class="mb-3"><label class="form-label">Status</label><select class="form-select" name="status" required><option th:each="status : ${statusList}" th:value="${status}" th:text="${status}" th:selected="${partida.status == status}"></option></select></div>
+        <button class="btn btn-dark" type="submit">Salvar</button>
+        <a th:href="@{/partidas}" class="btn btn-outline-secondary">Voltar</a>
+    </form>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>

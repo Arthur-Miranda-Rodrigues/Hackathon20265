@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-5 text-center">
+    <h1>403</h1>
+    <p class="lead">Acesso negado.</p>
+    <a th:href="@{/dashboard}" class="btn btn-outline-primary">Voltar</a>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>

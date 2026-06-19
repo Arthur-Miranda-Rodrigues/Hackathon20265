@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}">
+    <meta charset="UTF-8">
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <form class="p-5 shadow bg-white rounded w-100" style="max-width: 420px;" method="post" th:action="@{/login}">
+        <h4 class="mb-4 text-center">Login Admin</h4>
+        <div th:if="${param.error}" class="alert alert-danger">E-mail ou senha inválidos.</div>
+        <div th:if="${param.logout}" class="alert alert-success">Sessão encerrada.</div>
+        <div class="mb-3">
+            <label class="form-label">E-mail</label>
+            <input class="form-control" type="text" name="username" placeholder="admin@bolao.com" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input class="form-control" type="password" name="password" placeholder="Senha" required>
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary" type="submit">Entrar</button>
+        </div>
+    </form>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>

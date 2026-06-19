@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}">
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div class="container py-3">
+
+    <div th:insert="~{index :: menu}"></div>
+
+    <div class="row g-3 mt-2">
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Total de usuarios</h6>
+                    <h2 th:text="${totalUsuarios}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Total de palpites</h6>
+                    <h2 th:text="${totalPalpites}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Partidas pendentes</h6>
+                    <h2 th:text="${partidasPendentes}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Ativos 24h</h6>
+                    <h2 th:text="${usuariosAtivos24h}">0</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Líder Atual -->
+    <div class="alert alert-warning mt-4"
+         th:if="${ranking != null and !ranking.isEmpty()}">
+
+        🏆 Líder atual:
+        <strong th:text="${ranking[0].nome}"></strong>
+
+        com
+
+        <strong th:text="${ranking[0].pontuacaoTotal}"></strong>
+
+        pontos.
+    </div>
+
+    <h4 class="mt-4">Ranking Geral</h4>
+
+    <table class="table table-hover">
+
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Pontos</th>
+            <th>Placares Exatos</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="usuario, status : ${ranking}"
+            th:class="${status.index == 0} ? 'table-warning' : ''">
+
+            <td th:text="${status.index + 1}"></td>
+
+            <td>
+
+                <span th:if="${status.index == 0}">🥇</span>
+                <span th:if="${status.index == 1}">🥈</span>
+                <span th:if="${status.index == 2}">🥉</span>
+
+                <span th:text="${usuario.nome}"></span>
+
+            </td>
+
+            <td th:text="${usuario.pontuacaoTotal}"></td>
+
+            <td th:text="${usuario.placaresExatos}"></td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div th:insert="~{index :: script}"></div>
+
+</body>
+</html>

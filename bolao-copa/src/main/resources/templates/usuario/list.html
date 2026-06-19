@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"><meta charset="UTF-8"></head>
+<body>
+<div class="container py-3">
+    <div th:insert="~{index :: menu}"></div>
+    <table class="table table-hover">
+        <thead><tr><th>Id</th><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Pontos</th><th>Bloqueado</th><th>Ações</th></tr></thead>
+        <tbody>
+        <tr th:each="usuario : ${usuarios}">
+            <td th:text="${usuario.id}">1</td>
+            <td th:text="${usuario.nome}">Nome</td>
+            <td th:text="${usuario.email}">email</td>
+            <td th:text="${usuario.perfil}">USER</td>
+            <td th:text="${usuario.pontuacaoTotal}">0</td>
+            <td th:text="${usuario.bloqueado ? 'Sim' : 'Não'}">Não</td>
+            <td class="d-flex gap-1">
+                <a th:href="@{'/usuarios/' + ${usuario.id}}" class="btn btn-outline-dark btn-sm">Detalhes</a>
+                <form th:if="${!usuario.bloqueado}" th:action="@{'/usuarios/bloquear/' + ${usuario.id}}" method="post"><button class="btn btn-outline-danger btn-sm" type="submit">Bloquear</button></form>
+                <form th:if="${usuario.bloqueado}" th:action="@{'/usuarios/desbloquear/' + ${usuario.id}}" method="post"><button class="btn btn-outline-success btn-sm" type="submit">Desbloquear</button></form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:insert="~{index :: script}"></div>
+</body>
+</html>
