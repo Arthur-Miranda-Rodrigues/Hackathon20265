@@ -129,6 +129,41 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional
+    public void alterarSenhaComToken(String email, String token, String novaSenha) {
+        // 1. Validações básicas de campos vazios
+        validarTexto(email, "E-mail é obrigatório.");
+        validarTexto(token, "Token é obrigatório.");
+        validarTexto(novaSenha, "A nova senha é obrigatória.");
+
+        if (novaSenha.trim().length() < 6) {
+            throw new BusinessException("A nova senha deve ter pelo menos 6 caracteres.");
+        }
+
+        // 2. Busca o usuário pelo e-mail informado
+        Usuario usuario = buscarPorEmail(email);
+
+        // 3. Valida se existe um token gerado e se ele bate com o enviado pelo mobile
+        if (usuario.getTokenRecuperacaoSenha() == null || !usuario.getTokenRecuperacaoSenha().equals(token)) {
+            throw new BusinessException("Token de recuperação inválido.");
+        }
+
+        // 4. Verifica se o token não expirou
+        if (usuario.getTokenRecuperacaoExpiraEm() == null || usuario.getTokenRecuperacaoExpiraEm().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Este token de recuperação já expirou. Solicite um novo.");
+        }
+
+        // 5. Criptografa a nova senha com o PasswordEncoder e atualiza o usuário
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+
+        // 6. Limpa o token e a data de expiração para que o mesmo token não possa ser reutilizado
+        usuario.setTokenRecuperacaoSenha(null);
+        usuario.setTokenRecuperacaoExpiraEm(null);
+
+        // 7. Salva as alterações no banco de dados
+        repository.save(usuario);
+    }
+
+    @Transactional
     public void registrarLogin(String email) {
         repository.findByEmail(email).ifPresent(usuario -> {
             usuario.setUltimoLoginEm(LocalDateTime.now());

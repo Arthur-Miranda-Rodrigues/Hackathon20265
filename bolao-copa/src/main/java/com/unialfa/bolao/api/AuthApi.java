@@ -48,6 +48,14 @@ public class AuthApi {
         ));
     }
 
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<Map<String, String>> redefinirSenha(@RequestBody RedefinirSenhaRequest request) {
+        // Altere o método do seu usuarioService se o nome dos parâmetros for diferente
+        usuarioService.alterarSenhaComToken(request.email(), request.token(), request.senha());
+
+        return ResponseEntity.ok(Map.of("mensagem", "Senha alterada com sucesso!"));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
         return ResponseEntity.ok(Map.of("mensagem", "Sessão encerrada no dispositivo."));
@@ -56,6 +64,7 @@ public class AuthApi {
     public record CadastroRequest(String nome, String email, String senha) {}
     public record LoginRequest(String email, String senha) {}
     public record RecuperarSenhaRequest(String email) {}
+    public record RedefinirSenhaRequest(String email, String token, String senha) {}
 
     public record UsuarioResponse(Long id, String nome, String email, String avatarUrl, String perfil) {
         public static UsuarioResponse from(Usuario usuario) {

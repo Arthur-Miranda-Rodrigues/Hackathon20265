@@ -48,6 +48,12 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ email }),
     }),
+  // No seu arquivo de integração da API no React Native, certifique-se de usar o path idêntico:
+  redefinirSenha: (email: string, token: string, senha: string) =>
+    request<MensagemResponse>('/api/auth/redefinir-senha', {
+      method: 'POST',
+      body: JSON.stringify({ email, token, senha }),
+    }),
   logout: () => request<void>('/api/auth/logout', { method: 'POST' }),
 
   // Usuário

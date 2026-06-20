@@ -47,7 +47,7 @@ public class SecurityConfiguration {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/cadastro", "/api/auth/login", "/api/auth/recuperar-senha").permitAll()
+                        .requestMatchers("/api/auth/cadastro", "/api/auth/login", "/api/auth/recuperar-senha", "/api/auth/redefinir-senha").permitAll()
                         .requestMatchers("/api/partidas/proximas").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/partidas", "/api/partidas/*", "/api/ranking").permitAll()
                         .requestMatchers("/api/usuarios/me", "/api/palpites/**", "/api/ranking/me", "/api/auth/logout").authenticated()
