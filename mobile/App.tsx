@@ -1,12 +1,12 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { AuthProvider, useAuth } from './src/context/AuthContext';
-import { cores } from './src/theme';
+import { cores, estilos } from './src/theme';
 import type { AuthStackParamList, PartidasStackParamList } from './src/types';
 
 import LoginScreen from './src/screens/LoginScreen';
@@ -58,6 +58,43 @@ function AppTabs() {
   );
 }
 
+function EntrarVisitante() {
+  const { sairVisitante } = useAuth();
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 24,
+        backgroundColor: cores.fundo,
+      }}
+    >
+      <Text style={{ color: cores.texto, fontSize: 16, textAlign: 'center', marginBottom: 16 }}>
+        Você está navegando como visitante. Faça login para palpitar e entrar no ranking.
+      </Text>
+      <TouchableOpacity style={estilos.botao} onPress={sairVisitante}>
+        <Text style={estilos.botaoTexto}>Fazer login</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function VisitanteTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        ...telaCabecalho,
+        tabBarActiveTintColor: cores.primaria,
+      }}
+    >
+      <Tab.Screen name="Jogos" component={PartidasStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Ranking" component={RankingScreen} />
+      <Tab.Screen name="Entrar" component={EntrarVisitante} />
+    </Tab.Navigator>
+  );
+}
+
 function AuthStack() {
   return (
     <AuthStackNav.Navigator screenOptions={telaCabecalho}>
@@ -73,7 +110,7 @@ function AuthStack() {
 }
 
 function Rotas() {
-  const { usuario, carregando } = useAuth();
+  const { usuario, visitante, carregando } = useAuth();
 
   if (carregando) {
     return (
@@ -91,7 +128,9 @@ function Rotas() {
   }
 
   return (
-    <NavigationContainer>{usuario ? <AppTabs /> : <AuthStack />}</NavigationContainer>
+    <NavigationContainer>
+      {usuario ? <AppTabs /> : visitante ? <VisitanteTabs /> : <AuthStack />}
+    </NavigationContainer>
   );
 }
 

@@ -16,15 +16,24 @@ export default function RankingScreen() {
   const carregar = useCallback(async (page: number) => {
     setCarregando(true);
     try {
-      const [ranking, posicao] = await Promise.all([api.ranking(page, 50), api.minhaPosicao()]);
+      const ranking = await api.ranking(page, 50);
       setDados(ranking);
-      setMinhaPosicao(posicao);
+      // Posição própria só faz sentido (e só é permitida) para usuário autenticado.
+      if (usuario) {
+        try {
+          setMinhaPosicao(await api.minhaPosicao());
+        } catch {
+          setMinhaPosicao(null);
+        }
+      } else {
+        setMinhaPosicao(null);
+      }
     } catch (e) {
       setDados({ content: [], totalPages: 1, number: 0 });
     } finally {
       setCarregando(false);
     }
-  }, []);
+  }, [usuario]);
 
   useFocusEffect(
     useCallback(() => {
