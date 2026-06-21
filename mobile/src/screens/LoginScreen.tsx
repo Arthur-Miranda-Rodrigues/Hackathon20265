@@ -5,7 +5,7 @@ import { estilos } from '../theme';
 import type { LoginScreenProps } from '../types';
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
-  const { login } = useAuth();
+  const { login, entrarComoVisitante } = useAuth();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
@@ -50,6 +50,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RecuperarSenha')}>
         <Text style={estilos.link}>Esqueci minha senha</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={entrarComoVisitante}>
+        <Text style={estilos.link}>Explorar sem login</Text>
       </TouchableOpacity>
     </ScrollView>
   );
