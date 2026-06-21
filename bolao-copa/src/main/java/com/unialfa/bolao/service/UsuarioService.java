@@ -5,6 +5,8 @@ import com.unialfa.bolao.exception.NotFoundException;
 import com.unialfa.bolao.model.PerfilUsuario;
 import com.unialfa.bolao.model.Usuario;
 import com.unialfa.bolao.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +20,8 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService implements UserDetailsService {
+
+    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -119,13 +123,17 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional
-    public String solicitarRecuperacaoSenha(String email) {
-        Usuario usuario = buscarPorEmail(email);
-        String token = UUID.randomUUID().toString();
-        usuario.setTokenRecuperacaoSenha(token);
-        usuario.setTokenRecuperacaoExpiraEm(LocalDateTime.now().plusHours(2));
-        repository.save(usuario);
-        return token;
+    public void solicitarRecuperacaoSenha(String email) {
+        // Não revela se o e-mail existe e nunca devolve o token na resposta da API.
+        repository.findByEmail(email).ifPresent(usuario -> {
+            String token = UUID.randomUUID().toString();
+            usuario.setTokenRecuperacaoSenha(token);
+            usuario.setTokenRecuperacaoExpiraEm(LocalDateTime.now().plusHours(2));
+            repository.save(usuario);
+            // Em produção, enviar o token por e-mail. Sem SMTP configurado,
+            // registramos no log do servidor para uso em desenvolvimento.
+            log.info("Token de recuperação de senha para {}: {}", email, token);
+        });
     }
 
     @Transactional

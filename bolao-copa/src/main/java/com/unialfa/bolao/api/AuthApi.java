@@ -41,10 +41,9 @@ public class AuthApi {
 
     @PostMapping("/recuperar-senha")
     public ResponseEntity<Map<String, String>> recuperarSenha(@RequestBody RecuperarSenhaRequest request) {
-        String token = usuarioService.solicitarRecuperacaoSenha(request.email());
+        usuarioService.solicitarRecuperacaoSenha(request.email());
         return ResponseEntity.ok(Map.of(
-                "mensagem", "Token de recuperação gerado.",
-                "token", token
+                "mensagem", "Se o e-mail estiver cadastrado, enviaremos as instruções de recuperação."
         ));
     }
 
