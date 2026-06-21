@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Bolão Copa 2026 — Tema "Sportsbrut": dark + verde vibrante (casa de apostas)
+   Sobrescreve o Bootstrap 5.3 (data-bs-theme="dark") com identidade própria.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap');
+
+:root,
+[data-bs-theme="dark"] {
+  --verde: #1ee07a;
+  --verde-2: #0fb863;
+  --verde-3: #0a8f4d;
+  --verde-glow: rgba(30, 224, 122, 0.35);
+
+  --bg: #070d0a;
+  --bg-2: #0b1410;
+  --surface: #101d17;
+  --surface-2: #16271e;
+  --linha: rgba(30, 224, 122, 0.16);
+  --texto: #eaf4ef;
+  --texto-fraco: #8ea69b;
+
+  /* Mapeia para as variáveis do Bootstrap */
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--texto);
+  --bs-emphasis-color: #ffffff;
+  --bs-secondary-color: var(--texto-fraco);
+  --bs-border-color: var(--linha);
+  --bs-primary: var(--verde);
+  --bs-primary-rgb: 30, 224, 122;
+  --bs-link-color: var(--verde);
+  --bs-link-hover-color: #4dffa0;
+  --bs-body-font-family: 'Sora', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* ---------- Base ---------- */
+body {
+  background:
+    radial-gradient(1100px 520px at 85% -10%, rgba(30, 224, 122, 0.10), transparent 60%),
+    radial-gradient(900px 480px at 0% 0%, rgba(15, 184, 99, 0.07), transparent 55%),
+    var(--bg);
+  color: var(--texto);
+  font-family: 'Sora', system-ui, sans-serif;
+  min-height: 100vh;
+  letter-spacing: 0.2px;
+}
+
+h1, h2, h3, h4, h5, h6 { font-weight: 700; color: #fff; }
+.lead { color: var(--texto-fraco); }
+a { text-decoration: none; }
+
+/* Faixa superior verde fina */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--verde), var(--verde-3), var(--verde));
+  z-index: 1000;
+}
+
+/* ---------- Cabeçalho / marca (fragment "menu") ---------- */
+.container > [th\:fragment], .container { position: relative; }
+
+h1.h3 {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(95deg, #ffffff 10%, var(--verde) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Navegação (botões do menu) ---------- */
+.btn {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0.5rem 1rem;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--verde), var(--verde-2));
+  border: none;
+  color: #052b18;
+  box-shadow: 0 8px 22px var(--verde-glow);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(135deg, #34ff90, var(--verde));
+  color: #042113;
+  box-shadow: 0 10px 28px var(--verde-glow);
+}
+
+.btn-outline-primary {
+  color: var(--verde);
+  border: 1px solid var(--linha);
+  background: rgba(30, 224, 122, 0.04);
+}
+.btn-outline-primary:hover {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #052b18;
+  box-shadow: 0 8px 22px var(--verde-glow);
+}
+
+.btn-outline-danger {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: transparent;
+}
+.btn-outline-danger:hover { background: #ff6b6b; color: #2b0606; border-color: #ff6b6b; }
+
+.btn-secondary {
+  background: var(--surface-2);
+  border: 1px solid var(--linha);
+  color: var(--texto);
+}
+.btn-secondary:hover { background: #20342a; color: #fff; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: linear-gradient(160deg, var(--surface) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--linha);
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+.card-body { padding: 1.25rem 1.35rem; }
+
+/* Cards-indicador do dashboard */
+.card-body h6 {
+  color: var(--texto-fraco);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.card-body h2 {
+  color: var(--verde);
+  font-weight: 800;
+  font-size: 2.4rem;
+  text-shadow: 0 0 24px var(--verde-glow);
+  margin: 0;
+}
+/* destaque na borda esquerda dos cards de KPI */
+.row.g-3 .card { border-left: 3px solid var(--verde); }
+
+/* ---------- Formulários ---------- */
+.form-label { color: var(--texto-fraco); font-weight: 600; font-size: 0.85rem; }
+.form-control, .form-select {
+  background: var(--surface-2);
+  border: 1px solid var(--linha);
+  color: var(--texto);
+  border-radius: 12px;
+  padding: 0.65rem 0.9rem;
+}
+.form-control::placeholder { color: #5f7468; }
+.form-control:focus, .form-select:focus {
+  background: var(--surface-2);
+  color: var(--texto);
+  border-color: var(--verde);
+  box-shadow: 0 0 0 0.22rem var(--verde-glow);
+}
+.form-select option { background: var(--surface); color: var(--texto); }
+
+/* ---------- Tabelas ---------- */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--texto);
+  color: var(--texto);
+  border-color: var(--linha);
+}
+.table thead th {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--texto-fraco);
+  border-bottom: 1px solid var(--linha);
+  background: transparent;
+}
+.table td, .table th {
+  border-color: rgba(255, 255, 255, 0.05);
+  padding: 0.85rem 0.75rem;
+  vertical-align: middle;
+}
+.table-hover tbody tr { transition: background .12s ease; }
+.table-hover tbody tr:hover > * { background: rgba(30, 224, 122, 0.07); color: #fff; }
+.table-warning, .table > tbody > tr.table-warning > * {
+  --bs-table-bg: rgba(30, 224, 122, 0.12);
+  background: rgba(30, 224, 122, 0.12) !important;
+  color: #fff !important;
+}
+
+/* ---------- Alertas ---------- */
+.alert { border-radius: 14px; border: 1px solid var(--linha); }
+.alert-success {
+  background: rgba(30, 224, 122, 0.12);
+  color: #b6ffd9; border-color: rgba(30, 224, 122, 0.3);
+}
+.alert-warning {
+  background: rgba(255, 196, 0, 0.10);
+  color: #ffe49a; border-color: rgba(255, 196, 0, 0.28);
+}
+.alert-danger {
+  background: rgba(255, 107, 107, 0.12);
+  color: #ffc2c2; border-color: rgba(255, 107, 107, 0.3);
+}
+
+/* ---------- Badges ---------- */
+.badge.bg-primary, .badge.text-bg-primary { background: var(--verde) !important; color: #052b18 !important; }
+
+/* ---------- Login ---------- */
+body.bg-light { background:
+    radial-gradient(900px 600px at 50% -20%, rgba(30, 224, 122, 0.14), transparent 60%),
+    var(--bg) !important; }
+.bg-white {
+  background: linear-gradient(160deg, var(--surface), var(--bg-2)) !important;
+  border: 1px solid var(--linha);
+}
+form.bg-white { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important; }
+form.bg-white h4 {
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+form.bg-white h4::before {
+  content: "⚽ ";
+}
+
+/* Pequenos detalhes */
+::selection { background: var(--verde); color: #052b18; }
+hr { border-color: var(--linha); }
