@@ -19,8 +19,9 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("usuarios", service.listar());
+    public String listar(@RequestParam(required = false) String q, Model model) {
+        model.addAttribute("usuarios", service.pesquisar(q));
+        model.addAttribute("q", q);
         return "usuario/list";
     }
 

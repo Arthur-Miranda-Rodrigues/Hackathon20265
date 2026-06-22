@@ -102,11 +102,26 @@ public class UsuarioService implements UserDetailsService {
         return repository.findAll();
     }
 
+    public List<Usuario> pesquisar(String termo) {
+        if (termo == null || termo.isBlank()) {
+            return repository.findAll();
+        }
+        String t = termo.trim();
+        return repository.findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCase(t, t);
+    }
+
     @Transactional
     public Usuario editarPerfil(String email, String nome, String avatarUrl) {
         Usuario usuario = buscarPorEmail(email);
         validarTexto(nome, "Nome é obrigatório.");
         usuario.setNome(nome);
+        usuario.setAvatarUrl(avatarUrl);
+        return repository.save(usuario);
+    }
+
+    @Transactional
+    public Usuario atualizarAvatar(String email, String avatarUrl) {
+        Usuario usuario = buscarPorEmail(email);
         usuario.setAvatarUrl(avatarUrl);
         return repository.save(usuario);
     }
