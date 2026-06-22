@@ -30,3 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Uploads (imagens enviadas em runtime: avatar, bandeira) ###
+uploads/
+desktop.ini
