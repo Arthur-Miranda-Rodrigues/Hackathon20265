@@ -1,10 +1,12 @@
 package com.unialfa.bolao.controller;
 
 import com.unialfa.bolao.model.Selecao;
+import com.unialfa.bolao.service.FileStorageService;
 import com.unialfa.bolao.service.SelecaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -12,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SelecaoController {
 
     private final SelecaoService service;
+    private final FileStorageService fileStorageService;
 
-    public SelecaoController(SelecaoService service) {
+    public SelecaoController(SelecaoService service, FileStorageService fileStorageService) {
         this.service = service;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping
@@ -36,8 +40,13 @@ public class SelecaoController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(Selecao selecao, RedirectAttributes redirectAttributes) {
+    public String salvar(Selecao selecao,
+                         @RequestParam(value = "bandeiraFile", required = false) MultipartFile bandeiraFile,
+                         RedirectAttributes redirectAttributes) {
         try {
+            if (bandeiraFile != null && !bandeiraFile.isEmpty()) {
+                selecao.setBandeiraUrl(fileStorageService.salvarImagem(bandeiraFile));
+            }
             service.salvar(selecao);
             redirectAttributes.addFlashAttribute("sucesso", "Seleção salva com sucesso.");
         } catch (Exception e) {

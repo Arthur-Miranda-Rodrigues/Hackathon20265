@@ -1,10 +1,12 @@
 package com.unialfa.bolao.api;
 
 import com.unialfa.bolao.model.Usuario;
+import com.unialfa.bolao.service.FileStorageService;
 import com.unialfa.bolao.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -13,9 +15,11 @@ import java.util.Map;
 public class UsuarioApi {
 
     private final UsuarioService usuarioService;
+    private final FileStorageService fileStorageService;
 
-    public UsuarioApi(UsuarioService usuarioService) {
+    public UsuarioApi(UsuarioService usuarioService, FileStorageService fileStorageService) {
         this.usuarioService = usuarioService;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("/me")
@@ -34,6 +38,14 @@ public class UsuarioApi {
     public ResponseEntity<Map<String, String>> excluir(Authentication authentication, @RequestBody ExcluirContaRequest request) {
         usuarioService.solicitarExclusaoConta(authentication.getName(), request.confirmacao());
         return ResponseEntity.ok(Map.of("mensagem", "Conta excluída com sucesso."));
+    }
+
+    @PostMapping("/me/avatar")
+    public ResponseEntity<UsuarioResponse> uploadAvatar(Authentication authentication,
+                                                        @RequestParam("file") MultipartFile file) {
+        String url = fileStorageService.salvarImagem(file);
+        Usuario usuario = usuarioService.atualizarAvatar(authentication.getName(), url);
+        return ResponseEntity.ok(UsuarioResponse.from(usuario));
     }
 
     public record EditarPerfilRequest(String nome, String avatarUrl) {}

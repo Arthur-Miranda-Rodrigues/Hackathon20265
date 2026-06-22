@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
     boolean existsByEmail(String email);
+    List<Usuario> findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCase(String nome, String email);
     long countByUltimoLoginEmAfter(LocalDateTime dataHora);
     Page<Usuario> findByPerfilOrderByPontuacaoTotalDescPlacaresExatosDescCriadoEmAsc(PerfilUsuario perfil, Pageable pageable);
     List<Usuario> findByPerfilOrderByPontuacaoTotalDescPlacaresExatosDescCriadoEmAsc(PerfilUsuario perfil);

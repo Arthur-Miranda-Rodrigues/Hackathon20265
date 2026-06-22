@@ -4,11 +4,16 @@
 <body>
 <div class="container py-3">
     <div th:insert="~{index :: menu}"></div>
-    <form th:action="@{/selecoes/salvar}" method="post">
+    <form th:action="@{/selecoes/salvar}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" th:value="${selecao.id}">
         <div class="mb-3"><label class="form-label">Nome</label><input class="form-control" name="nome" th:value="${selecao.nome}" required></div>
         <div class="mb-3"><label class="form-label">Código FIFA</label><input class="form-control" name="codigoFifa" th:value="${selecao.codigoFifa}" required></div>
-        <div class="mb-3"><label class="form-label">Bandeira/Escudo</label><input class="form-control" name="bandeiraUrl" th:value="${selecao.bandeiraUrl}"></div>
+        <div class="mb-3">
+            <label class="form-label">Bandeira/Escudo (URL ou upload)</label>
+            <input class="form-control mb-2" name="bandeiraUrl" th:value="${selecao.bandeiraUrl}" placeholder="https://... (opcional)">
+            <input class="form-control" type="file" name="bandeiraFile" accept="image/*">
+            <img th:if="${selecao.bandeiraUrl}" th:src="${selecao.bandeiraUrl}" alt="bandeira" style="height:42px;margin-top:8px;border-radius:6px;">
+        </div>
         <div class="mb-3"><label class="form-label">Grupo</label><input class="form-control" name="grupo" th:value="${selecao.grupo}" required></div>
         <button class="btn btn-dark" type="submit">Salvar</button>
         <a th:href="@{/selecoes}" class="btn btn-outline-secondary">Voltar</a>

@@ -1,14 +1,17 @@
 package com.unialfa.bolao.api;
 
 import com.unialfa.bolao.model.Usuario;
+import com.unialfa.bolao.service.TokenDenylistService;
 import com.unialfa.bolao.service.TokenService;
 import com.unialfa.bolao.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.Map;
 
 @RestController
@@ -18,11 +21,14 @@ public class AuthApi {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
+    private final TokenDenylistService tokenDenylistService;
 
-    public AuthApi(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioService usuarioService) {
+    public AuthApi(AuthenticationManager authenticationManager, TokenService tokenService,
+                   UsuarioService usuarioService, TokenDenylistService tokenDenylistService) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
+        this.tokenDenylistService = tokenDenylistService;
     }
 
     @PostMapping("/cadastro")
@@ -56,8 +62,18 @@ public class AuthApi {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout() {
-        return ResponseEntity.ok(Map.of("mensagem", "Sessão encerrada no dispositivo."));
+    public ResponseEntity<Map<String, String>> logout(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            Authentication authentication) {
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7);
+            Instant expiraEm = null;
+            if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
+                expiraEm = jwt.getExpiresAt();
+            }
+            tokenDenylistService.revogar(token, expiraEm);
+        }
+        return ResponseEntity.ok(Map.of("mensagem", "Sessão encerrada e token invalidado."));
     }
 
     public record CadastroRequest(String nome, String email, String senha) {}
