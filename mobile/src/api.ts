@@ -63,6 +63,25 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify({ nome, avatarUrl }),
     }),
+  uploadAvatar: async (uri: string): Promise<Usuario> => {
+    const token = await AsyncStorage.getItem('token');
+    const nome = uri.split('/').pop() || 'avatar.jpg';
+    const ext = (nome.split('.').pop() || 'jpg').toLowerCase();
+    const form = new FormData();
+    // Em React Native, o arquivo é descrito por { uri, name, type }.
+    form.append('file', { uri, name: nome, type: `image/${ext}` } as any);
+    const res = await fetch(`${API_URL}/api/usuarios/me/avatar`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    });
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
+    if (!res.ok) {
+      throw new Error((data && (data.mensagem || data.erro)) || 'Falha ao enviar a imagem.');
+    }
+    return data as Usuario;
+  },
   excluirConta: () =>
     request<void>('/api/usuarios/me', {
       method: 'DELETE',
